@@ -38,9 +38,23 @@ Record your plan here before editing code.
 - Leaderboard approach:
 - Workout suggestions approach:
 
+## Current assessment
+
+The presentation tier owns rendering and API calls through the shared client; the logic tier owns request validation and service behavior; the data tier owns Mongoose validation, persistence, and seeding. Keep these responsibilities within their existing directories and preserve the relative `/api` proxy boundary.
+
+Baseline observed on 2026-10-26: the data suite has 4 failures and 1 pass (the idempotent seed test passes); the API suite has 4 failures; the frontend suite has 15 failures. The starter scaffold is intentionally incomplete. Data failures point to missing schema validation; API failures point to unimplemented or incorrect service behavior; frontend failures point to missing API rendering and loading, empty, or error states.
+
+Smallest safe implementation order:
+
+1. Complete Mongoose schema validation and preserve the passing seed idempotency behavior.
+2. Implement activity and team service operations, then leaderboard aggregation and user-specific workout suggestions; verify the API contract after each capability group.
+3. Implement the four frontend views using the shared API client, including loading, empty, error, and populated states.
+4. Run all contract suites and both builds.
+
+
 ## Test plan
 
-Record the commands you run and what each failure means.
+Run the focused contract suite after changing its tier. A data failure indicates missing schema validation, relationship, or seed behavior; an API failure indicates request handling or service behavior; a frontend failure indicates API consumption, rendered content, or an accessible state is missing. Build failures indicate TypeScript or production bundling issues.
 
 - Data-tier command: `npm run test:data --prefix octofit-tracker/backend`
 - API command: `npm run test:api --prefix octofit-tracker/backend`
